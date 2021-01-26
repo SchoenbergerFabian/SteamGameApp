@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="dialog_search_field" type="id"/>
+    <item name="dialog_name_field" type="id"/>
+    <item name="dialog_date_field" type="id"/>
+    <item name="dialog_price_field" type="id"/>
+</resources>
