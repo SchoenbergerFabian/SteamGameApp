@@ -34,7 +34,7 @@ public class SteamBackend {
         SimpleDateFormat format = new SimpleDateFormat(Game.DATE_FORMAT);
 
         try(BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))){
-            String line=in.readLine();
+            String line;
             while((line=in.readLine())!=null){
                 String[] arguments = line.split(SEPARATOR);
                 try {
@@ -52,7 +52,6 @@ public class SteamBackend {
         SimpleDateFormat format = new SimpleDateFormat(Game.DATE_FORMAT);
 
         PrintWriter out = new PrintWriter(new OutputStreamWriter(fileOutputStream));
-        out.println("Name;Release Date;Price");
         games.forEach(game -> {
             out.println(game.getName()+SEPARATOR+format.format(game.getReleaseDate())+SEPARATOR+game.getPrice());
             out.flush();

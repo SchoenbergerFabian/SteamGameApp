@@ -11,7 +11,8 @@
         android:id="@+id/addGame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADD GAME" />
+        android:text="New Game"
+        android:textAllCaps="true" />
 
     <Button
         android:id="@+id/save"

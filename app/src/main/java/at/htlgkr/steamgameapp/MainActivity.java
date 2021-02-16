@@ -1,6 +1,7 @@
 package at.htlgkr.steamgameapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +36,6 @@ import at.htlgkr.steam.ReportType;
 import at.htlgkr.steam.SteamBackend;
 
 public class MainActivity extends Activity {
-    private static final String GAMES_CSV = "games.csv";
 
     private SteamBackend sb = new SteamBackend();
 
@@ -50,13 +52,18 @@ public class MainActivity extends Activity {
     }
 
     private void loadGamesIntoListView() {
-        try {
-            sb.loadGames(getAssets().open("games.csv"));
-            ListView gamesList = findViewById(R.id.gamesList);
-            gamesList.setAdapter(new GameAdapter(this,R.layout.game_item_layout,sb.getGames()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ListView gamesList = findViewById(R.id.gamesList);
+        /*try{
+            sb.loadGames(openFileInput(SteamGameAppConstants.SAVE_GAMES_FILENAME));
+        } catch(FileNotFoundException ex){*/
+            try {
+                sb.loadGames(getAssets().open("games.csv"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        //}
+        gamesList.setAdapter(new GameAdapter(this,R.layout.game_item_layout,sb.getGames()));
+
     }
 
     private void setUpReportSelection() {
@@ -122,7 +129,6 @@ public class MainActivity extends Activity {
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //TODO custom filter?
                                 List<Game> filteredGames = sb.getGames().stream()
                                         .filter(game -> game.getName().toLowerCase().trim().contains(searchTerm.getText().toString().toLowerCase().trim()))
                                         .collect(Collectors.toList());
@@ -152,7 +158,7 @@ public class MainActivity extends Activity {
                 layout.addView(price);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setTitle(SteamGameAppConstants.ENTER_SEARCH_TERM)
+                alert.setTitle(SteamGameAppConstants.NEW_GAME_DIALOG_TITLE)
                         .setView(layout)
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
@@ -169,7 +175,15 @@ public class MainActivity extends Activity {
     }
 
     private void setUpSaveButton() {
-        //TODO
-        // Implementieren Sie diese Methode.
+        findViewById(R.id.save).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                try {
+                    sb.store(openFileOutput(SteamGameAppConstants.SAVE_GAMES_FILENAME,Context.MODE_PRIVATE));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

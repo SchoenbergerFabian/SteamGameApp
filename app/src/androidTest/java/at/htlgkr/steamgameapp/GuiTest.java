@@ -60,7 +60,6 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class GuiTest {
-    /* Kommentieren Sie diesen Code ein wenn die Oberfläche fertig ist
     @Rule
     public ActivityTestRule<MainActivity> myActivityRule = new ActivityTestRule<>(MainActivity.class);
 
@@ -443,5 +442,5 @@ public class GuiTest {
         onView(withId(R.id.chooseReport)).perform(click());
         onData(hasToString(startsWith(dialogHeader))).perform(click());
         onView(withText(containsString(text))).inRoot(isDialog()).check(matches(isDisplayed()));
-    }*/
+    }
 }
